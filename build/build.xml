@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Javascript compress projectYUICompression" basedir=".." default="ConcatenateAndCompress">
+
+  <target name="Concatenate" description="Concatenate a set of files">
+    <mkdir dir="${basedir}/bin"/>
+
+    <delete>
+      <fileset dir="${basedir}/bin/" includes="*.js"/>
+    </delete>
+
+    <concat destfile="${basedir}/bin/jcopf-1.0.js"
+            encoding="UTF-8" outputencoding="UTF-8"
+            append="no" fixlastline="true">
+      <path>
+        <pathelement location="${basedir}/src/org/puremvc/js/objs/patterns/observer/Observer.js" />
+        <pathelement location="${basedir}/src/org/puremvc/js/objs/patterns/observer/Notification.js" />
+        <pathelement location="${basedir}/src/org/puremvc/js/objs/core/View.js" />
+        <pathelement location="${basedir}/src/org/puremvc/js/objs/core/Model.js" />
+        <pathelement location="${basedir}/src/org/puremvc/js/objs/core/Controller.js" />
+        <pathelement location="${basedir}/src/org/puremvc/js/objs/patterns/facade/Facade.js" />
+        <pathelement location="${basedir}/src/org/puremvc/js/objs/patterns/observer/Notifier.js" />
+        <pathelement location="${basedir}/src/org/puremvc/js/objs/patterns/command/SimpleCommand.js" />
+        <pathelement location="${basedir}/src/org/puremvc/js/objs/patterns/command/MacroCommand.js" />
+        <pathelement location="${basedir}/src/org/puremvc/js/objs/patterns/mediator/Mediator.js" />
+        <pathelement location="${basedir}/src/org/puremvc/js/objs/patterns/proxy/Proxy.js" />
+      </path>
+    </concat>
+  </target>
+
+  <!--compress js file by YUI compressor-->
+  <target name="yui-compress" depends="Concatenate">
+    <property name="yui.compress" value="${basedir}/build/lib/yuicompressor-2.4.6.jar" />
+    
+    <apply executable="java" parallel="false" verbose="true" dest="${basedir}/bin" taskname="js.compile">
+      <fileset dir="${basedir}/bin/">
+        <include name="**/*.js"/>
+      </fileset>
+      <arg line="-jar"/>
+      <arg path="${yui.compress}" />
+      <arg line="--type js --charset UTF-8 -o" />
+      <mapper type="glob" from="*.js" to="*-yui-min.js" />
+      <targetfile />
+    </apply>
+  </target>
+  
+  <!--compress js file by Google Closure Compiler-->
+  <target name="google-compress" depends="Concatenate">
+    <property name="google.compress" value="${basedir}/build/lib/compiler.jar" />
+
+    <apply executable="java" parallel="false" verbose="true" dest="${basedir}/bin" taskname="js.compile">
+      <fileset dir="${basedir}/bin/">
+        <include name="**/*.js"/>
+      </fileset>
+      <arg line="-jar"/>
+      <arg path="${google.compress}" />
+      <arg line="--js" />
+      <srcfile/>
+      <arg line="--js_output_file"/>
+      <mapper type="glob" from="*.js" to="*-gc-min.js" />
+      <targetfile />
+    </apply>
+  </target>
+
+</project>
