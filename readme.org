@@ -1,0 +1,7 @@
+#+STARTUP: indent
+#+OPTIONS: H:4
+#+AUTHOR: Zxy
+#+EMAIL: gcoordinate@gmail.com
+#+TITLE: Readme for JCOPF
+
+* WHATE¡¡IS¡¡JCOPF
